@@ -8,13 +8,11 @@
 
 import UIKit
 
-class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
-
-    @IBOutlet weak var tableViewDateFormatter: UITableView?
-    @IBOutlet weak var textFieldDateFormatter: UITextField?
+class ViewController: UIViewController ,UIPickerViewDelegate,UIPickerViewDataSource{
+    
+    @IBOutlet weak var pickerViewDateFormatter: UIPickerView?
     @IBOutlet weak var textFieldCurrentDate: UITextField?
     @IBOutlet weak var textFieldChangeDate: UITextField?
-    var isDropDown:Bool = false
     var arrayDateFormatters = [String]()
 
     
@@ -30,66 +28,46 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
         arrayDateFormatters.append("MMM d, yyyy")
         arrayDateFormatters.append("E, d MMM yyyy HH:mm:ss Z")
         arrayDateFormatters.append("dd.MM.yy")
-
-
+        
         self.methodSetCurrentDate()
         // Do any additional setup after loading the view, typically from a nib.
     }
-    @IBAction func methodShowDateFormatter(sender: AnyObject) {
-        
-        self.methodDropDown(isOpen: isDropDown)
-        
-    }
-    func methodDropDown(isOpen:Bool){
-        if isOpen {
-            isDropDown = false
-            tableViewDateFormatter?.isHidden = true
-        }else{
-            isDropDown = true
-            tableViewDateFormatter?.isHidden = false
-        }
-    }
+    
+    
     
     func methodGetCurrentDate()->NSDate{
         let date = Date() as NSDate
         return date
     }
     func methodSetCurrentDate(){
-        self.textFieldDateFormatter?.text =  self.arrayDateFormatters[0]
-        let stringCurrentDate:String = DateManagerClass.methodStringFromDate(dateFromString: self.methodGetCurrentDate(), stringDateFormatter: (textFieldDateFormatter?.text)!)
+        let stringCurrentDate:String = DateManagerClass.methodStringFromDate(dateFromString: self.methodGetCurrentDate(), stringDateFormatter: arrayDateFormatters[0])
         self.textFieldCurrentDate?.text = stringCurrentDate
         self.textFieldChangeDate?.text = stringCurrentDate
 
     }
     func methodConvertDate(indexValue:Int){
-        textFieldDateFormatter?.text = arrayDateFormatters[indexValue]
         
-        let stringConvertDate:String = DateManagerClass.methodStringFromDate(dateFromString: self.methodGetCurrentDate(), stringDateFormatter: (textFieldDateFormatter?.text)!)
+        let stringConvertDate:String = DateManagerClass.methodStringFromDate(dateFromString: self.methodGetCurrentDate(), stringDateFormatter: arrayDateFormatters[indexValue])
         self.textFieldChangeDate?.text = stringConvertDate
     }
-// MARK: - UITableView Delegates & DataSource
-    func numberOfSections(in tableView: UITableView) -> Int {
+// MARK: - UIPickerView Delegates & DataSource
+    // The number of columns of data
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
-    }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-            return arrayDateFormatters.count
-        
-    }
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-            cell.textLabel?.text = arrayDateFormatters[indexPath.row]
-        
-        return cell
-    }
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
-    }
-    
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.methodConvertDate(indexValue: indexPath.row)
 
+    }
+    // The number of rows of data
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return arrayDateFormatters.count
+    }
+    
+    // The data to return for the row and component (column) that's being passed in
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return arrayDateFormatters[row]
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        self.methodConvertDate(indexValue: row)
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

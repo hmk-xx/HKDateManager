@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import DateManager
 class ViewController: UIViewController ,UIPickerViewDelegate,UIPickerViewDataSource{
     
     @IBOutlet weak var pickerViewDateFormatter: UIPickerView?
@@ -40,14 +40,14 @@ class ViewController: UIViewController ,UIPickerViewDelegate,UIPickerViewDataSou
         return date
     }
     func methodSetCurrentDate(){
-        let stringCurrentDate:String = DateManagerClass.methodStringFromDate(dateFromString: self.methodGetCurrentDate(), stringDateFormatter: arrayDateFormatters[0])
+        let stringCurrentDate:String = DateFormatManager().methodStringFromDate(dateFromString: self.methodGetCurrentDate(), stringDateFormatter: arrayDateFormatters[0])
         self.textFieldCurrentDate?.text = stringCurrentDate
         self.textFieldChangeDate?.text = stringCurrentDate
 
     }
     func methodConvertDate(indexValue:Int){
         
-        let stringConvertDate:String = DateManagerClass.methodStringFromDate(dateFromString: self.methodGetCurrentDate(), stringDateFormatter: arrayDateFormatters[indexValue])
+        let stringConvertDate:String = DateFormatManager().methodStringFromDate(dateFromString: self.methodGetCurrentDate(), stringDateFormatter: arrayDateFormatters[indexValue])
         self.textFieldChangeDate?.text = stringConvertDate
     }
 // MARK: - UIPickerView Delegates & DataSource

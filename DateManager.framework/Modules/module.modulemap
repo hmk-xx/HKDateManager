@@ -1,0 +1,11 @@
+framework module DateManager {
+  umbrella header "DateManager.h"
+
+  export *
+  module * { export * }
+}
+
+module DateManager.Swift {
+    header "DateManager-Swift.h"
+    requires objc
+}
